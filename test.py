@@ -4,7 +4,7 @@ from aiohttp import ClientSession
 import logging
 from os import environ
 import pyhilo
-from pyhilo import API
+from pyhilo import API, Devices
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -16,7 +16,9 @@ async def async_main() -> None:
     username="x@gmail.com"
     password="yyyyyy"
     api = await API.async_auth_password(username, password, session=ClientSession())
-    print(api.device_attributes)
+    location_id = await api.get_location_id()
+    for device in await api.get_devices(location_id):
+        logging.debug(f"Generating device {device}")
 
 
 loop = asyncio.get_event_loop()
